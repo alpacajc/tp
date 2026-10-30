@@ -26,16 +26,30 @@ public class PhoneTest {
 
         // invalid phone numbers
         assertFalse(Phone.isValidPhone(" ")); // spaces only
-        assertFalse(Phone.isValidPhone("91")); // less than 3 numbers
-        assertFalse(Phone.isValidPhone("phone")); // non-numeric
-        assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
-        assertFalse(Phone.isValidPhone("9312 1534")); // spaces within digits
+        assertFalse(Phone.isValidPhone("91")); // fewer than 3 digits
+        assertFalse(Phone.isValidPhone("phone")); // no digits
+        assertFalse(Phone.isValidPhone("12@345")); // unsupported character
+        assertFalse(Phone.isValidPhone("12.345")); // unsupported punctuation
 
         // valid phone numbers
         assertTrue(Phone.isValidPhone("")); // not provided
         assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
         assertTrue(Phone.isValidPhone("93121534"));
         assertTrue(Phone.isValidPhone("124293842033123")); // long phone numbers
+        assertTrue(Phone.isValidPhone("")); // phone is optional
+        assertTrue(Phone.isValidPhone("91234567")); // digits
+        assertTrue(Phone.isValidPhone("+65 9123-4567")); // permitted formatting
+        assertTrue(Phone.isValidPhone("(212) 555-0123")); // parentheses
+        assertTrue(Phone.isValidPhone("ABC 123")); // letters with at least 3 digits
+        assertTrue(Phone.isValidPhone("9011p041")); // letters within digits
+        assertTrue(Phone.isValidPhone("9312 1534")); // spaces within digits
+    }
+
+    @Test
+    public void containsDigitsOnly() {
+        assertTrue(new Phone("123").containsDigitsOnly());
+        assertFalse(new Phone("+65 9123-4567").containsDigitsOnly());
+        assertTrue(new Phone("").containsDigitsOnly()); // empty string has no non-digit characters
     }
 
     @Test

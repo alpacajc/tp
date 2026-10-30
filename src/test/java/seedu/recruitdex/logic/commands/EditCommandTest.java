@@ -31,6 +31,8 @@ import seedu.recruitdex.model.userprefs.UserPrefs;
 import seedu.recruitdex.testutil.ApplicantBuilder;
 import seedu.recruitdex.testutil.EditApplicantDescriptorBuilder;
 
+import java.util.List;
+
 /**
  * Contains integration tests (interaction with the Model) and unit tests for EditCommand.
  */
@@ -238,5 +240,51 @@ public class EditCommandTest {
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
         assertEquals("", model.getFilteredApplicantList().get(0).getInterviewNotes().value);
+    }
+
+    @Test
+    public void execute_phoneWithLetters_addsWarning() throws Exception {
+        Model model = new ModelManager();
+        Applicant applicantToEdit = new ApplicantBuilder().build();
+        model.getApplicantRegistry().add(applicantToEdit);
+
+        Applicant editedApplicant = new ApplicantBuilder(applicantToEdit)
+                .withPhone("call 91234567")
+                .build();
+
+        EditApplicantDescriptor descriptor = new EditApplicantDescriptorBuilder()
+                .withPhone("call 91234567")
+                .build();
+        EditCommand command = new EditCommand(INDEX_FIRST_APPLICANT, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICANT_SUCCESS,
+                Messages.format(editedApplicant))
+                + "\nWarning: The phone number has non-numeric characters. Please check if they are intentional.";
+
+        assertCommandSuccess(command, model, expectedMessage, model);
+    }
+
+    @Test
+    public void execute_editOtherFieldWithExistingPhoneLetters_addsWarning() throws Exception {
+        Model model = new ModelManager();
+        Applicant applicantToEdit = new ApplicantBuilder()
+                .withPhone("call 91234567")
+                .build();
+        model.getApplicantRegistry().add(applicantToEdit);
+
+        Applicant editedApplicant = new ApplicantBuilder(applicantToEdit)
+                .withName(VALID_NAME_BOB)
+                .build();
+
+        EditApplicantDescriptor descriptor = new EditApplicantDescriptorBuilder()
+                .withName(VALID_NAME_BOB)
+                .build();
+        EditCommand command = new EditCommand(INDEX_FIRST_APPLICANT, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICANT_SUCCESS,
+                Messages.format(editedApplicant))
+                + "\nWarning: The phone number has non-numeric characters. Please check if they are intentional.";
+
+        assertCommandSuccess(command, model, expectedMessage, model);
     }
 }

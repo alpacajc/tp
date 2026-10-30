@@ -29,6 +29,10 @@ public class NameTest {
         assertFalse(Name.isValidName(" ")); // spaces only
         assertFalse(Name.isValidName("^")); // only non-alphanumeric characters
         assertFalse(Name.isValidName("peter*")); // contains non-alphanumeric characters
+        assertFalse(Name.isValidName("")); // empty
+        assertFalse(Name.isValidName(" Starts with space")); // first character must be a letter or number
+        assertFalse(Name.isValidName("Alex*")); // unsupported symbol
+        assertFalse(Name.isValidName("Alex_Lee")); // underscore is not allowed
 
         // valid name
         assertTrue(Name.isValidName("peter jack")); // alphabets only
@@ -36,6 +40,11 @@ public class NameTest {
         assertTrue(Name.isValidName("peter the 2nd")); // alphanumeric characters
         assertTrue(Name.isValidName("Capital Tan")); // with capital letters
         assertTrue(Name.isValidName("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(Name.isValidName("Alex Lee"));
+        assertTrue(Name.isValidName("O'Connor"));
+        assertTrue(Name.isValidName("Anne-Marie"));
+        assertTrue(Name.isValidName("Dr. Alex Lee, Jr."));
+        assertTrue(Name.isValidName("Jean/Paul"));
     }
 
     @Test

@@ -68,7 +68,11 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_APPLICANT, e);
         }
         model.updateFilteredApplicantList(PREDICATE_SHOW_ALL_APPLICANTS);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+        String message = String.format(MESSAGE_SUCCESS, Messages.format(toAdd));
+        if (!toAdd.getPhone().containsDigitsOnly()) {
+            message += "\nWarning: The phone number has non-numeric characters. Please check if they are intentional.";
+        }
+        return new CommandResult(message);
     }
 
     @Override

@@ -95,7 +95,11 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_APPLICANT, e);
         }
         model.updateFilteredApplicantList(PREDICATE_SHOW_ALL_APPLICANTS);
-        return new CommandResult(String.format(MESSAGE_EDIT_APPLICANT_SUCCESS, Messages.format(editedApplicant)));
+        String message = String.format(MESSAGE_EDIT_APPLICANT_SUCCESS, Messages.format(editedApplicant));
+        if (!editedApplicant.getPhone().containsDigitsOnly()) {
+            message += "\nWarning: The phone number has non-numeric characters. Please check if they are intentional.";
+        }
+        return new CommandResult(message);
     }
 
     /**

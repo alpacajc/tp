@@ -3,6 +3,7 @@ package seedu.recruitdex.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.recruitdex.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.recruitdex.testutil.Assert.assertThrows;
 import static seedu.recruitdex.testutil.TypicalApplicants.ALICE;
 
@@ -83,6 +84,24 @@ public class AddCommandTest {
         assertFalse(addAliceCommand.equals(1));
         assertFalse(addAliceCommand.equals(null));
         assertFalse(addAliceCommand.equals(addBobCommand));
+    }
+
+    @Test
+    public void execute_phoneWithLetters_addsApplicantAndReturnsWarning() throws Exception {
+        Model model = new ModelManager();
+        Applicant applicant = new ApplicantBuilder()
+                .withPhone("call 91234567")
+                .build();
+        AddCommand command = new AddCommand(applicant);
+
+        String expectedMessage = String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(applicant))
+                + "\nWarning: The phone number has non-numeric characters." +
+                " Please check if they are intentional.";
+
+        CommandResult result = command.execute(model);
+
+        assertEquals(expectedMessage, result.getFeedbackToUser());
+        assertEquals(List.of(applicant), model.getApplicantRegistry().getApplicantList());
     }
 
     @Test

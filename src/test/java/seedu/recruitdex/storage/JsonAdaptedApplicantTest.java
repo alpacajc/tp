@@ -26,7 +26,7 @@ import seedu.recruitdex.model.applicant.YearsOfExperience;
 public class JsonAdaptedApplicantTest {
     private static final String INVALID_ID = "not-a-uuid";
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "+651234";
+    private static final String INVALID_PHONE = "+65 12@34";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_YEARS_OF_EXPERIENCE = "61";

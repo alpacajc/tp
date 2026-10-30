@@ -9,12 +9,11 @@ import static seedu.recruitdex.commons.util.AppUtil.checkArgument;
  */
 public class Phone {
 
-
     public static final String DEFAULT_VALUE = "";
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should be empty or contain only digits, and should be at least 3 digits long when provided";
-    public static final String VALIDATION_REGEX = "\\d{3,}";
+            "Phone details must be empty or contain at least 3 digits on one line";
     public final String value;
+    private static final String VALIDATION_REGEX = "[\\p{L}\\d+ ()-]+";
 
     /**
      * Constructs a {@code Phone}.
@@ -31,7 +30,13 @@ public class Phone {
      * Returns true if a given string is empty or a valid phone number.
      */
     public static boolean isValidPhone(String test) {
-        return test.isEmpty() || test.matches(VALIDATION_REGEX);
+        return test.isEmpty()
+                || (test.codePoints().filter(Character::isDigit).count() >= 3
+                && test.matches(VALIDATION_REGEX));
+    }
+
+    public boolean containsDigitsOnly() {
+        return value.codePoints().allMatch(Character::isDigit);
     }
 
     @Override
